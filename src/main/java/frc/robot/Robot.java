@@ -30,8 +30,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private Compressor c = new Compressor(PneumaticsModuleType.REVPH);
-
   private Diagnostics2 diagnostics;
+  private long periodicCount;
   int alliance;
   double spdmlt = 1;
 
@@ -81,7 +81,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     
-    diagnostics.updateStatus();
+    // call updateStatus once per second
+    if (periodicCount++ % 50 == 0) {
+        diagnostics.updateStatus();
+    }
+    
     if(RobotMap.COMPRESSOR_ENABLE)
       c.enableDigital();
     else 

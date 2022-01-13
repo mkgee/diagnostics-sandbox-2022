@@ -1,11 +1,9 @@
 package frc.robot;
 
-import com.revrobotics.CANEncoder;
-// import com.revrobotics.CANError;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.REVLibError;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
@@ -13,8 +11,8 @@ public class CCSparkMax extends CANSparkMax{
 
     private String name;
     private String shortName;
-    private CANPIDController pidController;
-    private CANEncoder encoder;
+    private SparkMaxPIDController pidController;
+    private RelativeEncoder encoder;
 
     /**
      * CCSparkMax allows us to easily control Spark Max motor controllers
