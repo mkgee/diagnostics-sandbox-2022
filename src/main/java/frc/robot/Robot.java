@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-// import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -84,9 +83,9 @@ public class Robot extends TimedRobot {
     
     diagnostics.updateStatus();
     if(RobotMap.COMPRESSOR_ENABLE)
-      c.start();
+      c.enableDigital();
     else 
-      c.stop();
+      c.disable();
   }
 
   /**
