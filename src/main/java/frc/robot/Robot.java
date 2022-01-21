@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private Compressor c = new Compressor(PneumaticsModuleType.REVPH);
-  private Diagnostics diagnostics;
+  private DiagnosticsIF diagnostics;
   private long periodicCount;
   int alliance;
   double spdmlt = 1;
@@ -42,7 +42,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    diagnostics = new Diagnostics(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+    diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+    // diagnostics = new DiagnosticsListLayout( Chassis.bLeft, Chassis.bRight);
+    // diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight);
+    //diagnostics = new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+    // diagnostics = new Diagnostics(Chassis.fLeft, Chassis.fRight);
+
     m_chooser.addOption("My Auto", kCustomAuto);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Reset PID Values", kResetPIDs);

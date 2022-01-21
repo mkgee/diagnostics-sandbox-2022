@@ -15,16 +15,19 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 /**
  * Diagnostics defines some tabs in the shuffleboard to display diagnostics for the motors 
  * and power distribution panel.
  */
-public class Diagnostics {
+public class DiagnosticsGridLayout implements DiagnosticsIF {
  
     /* DataType defines the motor attributes to monitor.  The values here are a sample set. 
        Update this enumeration to define attributes you care about. */
-    enum DataType {FAULTS, STICKY_FAULTS, TEMP, INVERTED_STATE, POSITION, VELOCITY};
+    enum DataType {FAULTS, /*STICKY_FAULTS,*/ TEMP, /*INVERTED_STATE,*/ POSITION, VELOCITY};
 
     /* PowerDataType defines the power distribution panel  to monitor.  The values here are a sample set, 
        update this enumeratio to define the attributes you care about. */
@@ -56,7 +59,7 @@ public class Diagnostics {
     private final static int NUM_POWER_CHANNELS = 8;
 
     /* contructor, saves the injected motors */
-    public Diagnostics(CCSparkMax... motors) {
+    public DiagnosticsGridLayout(CCSparkMax... motors) {
         this.motors = motors;
     }
 
@@ -65,6 +68,7 @@ public class Diagnostics {
        It also displays a row of diagnostic widgets for each motor, so in the Motors tab there will be 4 rows.
        For the Power Distribution Panel, it create a set of widgets in the "Power" tab corresponding to the
        PowerDataType enumerations.  For Current, it displays current for the first 8 channels. */
+    @Override
     public void init() {
         
         faultEntry = summaryTab
@@ -73,10 +77,11 @@ public class Diagnostics {
           .getEntry();
 
         int row = 0;
-        final int faultsWidth = 2;
+        // final int faultsWidth = 2;
+        // int col = 0;
         // for each motor: Faults, Sticky Faults, Temp, Inverted state, position, velocity
         for(CCSparkMax m : motors) {
-            int col = 0;
+
             Map<DataType, NetworkTableEntry> entryMap = new EnumMap<>(DataType.class);
 
             // initialize motorEntryMap
@@ -85,91 +90,100 @@ public class Diagnostics {
             final String name = m.getName();
             final String shortName = m.getShortName();
 
+            ShuffleboardLayout motorLayout = motorTab
+                // .getLayout(m.getName(), BuiltInLayouts.kGrid)
+                .getLayout(m.getName(), BuiltInLayouts.kGrid)
+                .withSize(8, 1) // height can't be more than number of visible rows in shuffleboard
+                .withPosition(0, row)
+                .withProperties(Map.of("Label position", "TOP"));
+            row += 2;
             // FAULTS
-            entryMap.put(DataType.FAULTS, motorTab.add(name + " faults", "")
+            entryMap.put(DataType.FAULTS, motorLayout.add( " faults", "")
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(col, row) 
-            .withSize(faultsWidth, 1)
+            // .withPosition(col, row) 
+            // .withPosition(0,1)
+            // .withSize(faultsWidth, 1)
             .getEntry() );
-            col += faultsWidth;
+            // col += faultsWidth;
             
             // STICKY_FAULTS
-            entryMap.put(DataType.STICKY_FAULTS, motorTab.add(shortName + " sticky faults", "")
-            .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(col, row) 
-            .withSize(faultsWidth, 1)
-            .getEntry() );
-            col += faultsWidth;
+            // entryMap.put(DataType.STICKY_FAULTS, motorTab.add(shortName + " sticky faults", "")
+            // .withWidget(BuiltInWidgets.kTextView)
+            // // .withPosition(col, row) 
+            // .withSize(faultsWidth, 1)
+            // .getEntry() );
+            // col += faultsWidth;
             
             // INVERTED_STATE
-            entryMap.put(DataType.INVERTED_STATE, motorTab.add(shortName + " inv. state", "")
-            .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(col++, row) 
-            .withSize(1, 1)
-            .getEntry() );
+            // entryMap.put(DataType.INVERTED_STATE, motorLayout.add(shortName + " inv. state", "")
+            // .withWidget(BuiltInWidgets.kTextView)
+            // // .withPosition(col++, row) 
+            // // .withSize(1, 1)
+            // .getEntry() );
 
             // POSITION
-            entryMap.put(DataType.POSITION, motorTab.add(shortName + "  position", 0)
+            entryMap.put(DataType.POSITION, motorLayout.add("  position", 0)
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(col++, row) 
-            .withSize(1, 1)
+            // .withPosition(col++, row) 
+            // .withPosition(0,3)
+            // .withSize(1, 1)
             .getEntry() );
 
             // TEMP
-            entryMap.put(DataType.TEMP, motorTab.add(shortName + " temp", 0)
+            entryMap.put(DataType.TEMP, motorLayout.add( " temp", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row) 
-            .withSize(1, 1)
+            // .withPosition(col++, row) 
+            // .withPosition(0,4)
+            // .withSize(1, 1)
             .withProperties(Map.of("Min", 10, "Max", 100))  //celsius
             .getEntry() );
             
             // VELOCITY
-            entryMap.put(DataType.VELOCITY, motorTab.add(shortName + "  velocity", 0)
+            entryMap.put(DataType.VELOCITY, motorLayout.add("  velocity", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row) 
-            .withSize(1, 1)
+            // .withPosition(col++, row) 
             .getEntry() );
             
-            row++;
+            // row++;
         }
 
-        row = 0;
-        int col = 0;
+        // row = 0;
+        // int col = 0;
         // Power tab
 
         // Voltage
         powerEntryMap.put(PowerDataType.VOLTAGE, powerTab.add("Voltage", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row)
+            // .withPosition(col++, row)
             .withSize(1,1)
             .getEntry());
 
         // temperature
         powerEntryMap.put(PowerDataType.TEMP, powerTab.add("Temperature", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row)
+            // .withPosition(col++, row)
             .withSize(1,1)
             .getEntry());
 
         // total current
         powerEntryMap.put(PowerDataType.CURRENT, powerTab.add("Total Current", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row)
+            // .withPosition(col++, row)
             .withSize(1,1)
             .getEntry());
 
         powerEntryMap.put(PowerDataType.ENERGY, powerTab.add("Total Energy", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withPosition(col++, row)
+            // .withPosition(col++, row)
             .withSize(1,1)
             .getEntry());
         
-        row++;
-        col = 0;
+        // row++;
+        // col = 0;
         for (int i=0; i < NUM_POWER_CHANNELS; i++) {
             powerChannels.add(powerTab.add("Channel " + i + " current", 0)
                 .withWidget(BuiltInWidgets.kDial)
-                .withPosition(col++, row)
+                // .withPosition(col++, row)
                 .withSize(1,1)
                 .getEntry());
         }
@@ -189,6 +203,7 @@ public class Diagnostics {
             faultMsg = sj.toString();
         }
         entry.setString(faultMsg);
+        SmartDashboard.putString(entry.getName() + " faults", faultMsg);
     }
 
     private void updateStickyFaultStatus(NetworkTableEntry entry, CCSparkMax motor) {
@@ -228,15 +243,25 @@ public class Diagnostics {
 
     private void updateDoubleStatus(CCSparkMax motor, DataType type) {
         
+         NetworkTableEntry entry = getEntry(motor,type);
         switch(type) {
-            case TEMP:
-                getEntry(motor,type).setDouble(motor.getMotorTemperature());
+            case TEMP:                
+                if (entry != null) {
+                    entry.setDouble(motor.getMotorTemperature());
+                    SmartDashboard.putNumber(motor.getName()+ " temp", motor.getMotorTemperature());
+                }
                 break;
             case POSITION:
-                getEntry(motor,type).setString(Double.toString(motor.getEncoder().getPosition()));
+                if (entry != null) {
+                    entry.setString(Double.toString(motor.getEncoder().getPosition()));
+                    SmartDashboard.putNumber(motor.getName() + " pos", motor.getEncoder().getPosition());
+                }
                 break;
             case VELOCITY:
-                getEntry(motor,type).setDouble(motor.getEncoder().getVelocity());
+                if (entry != null) {
+                    entry.setDouble(motor.getEncoder().getVelocity());
+                    SmartDashboard.putNumber(motor.getName() + " vel", motor.getEncoder().getVelocity());
+                }
                 break;
             default:
                 break;
@@ -247,19 +272,22 @@ public class Diagnostics {
 
         switch(type) {
             case FAULTS:
-            case STICKY_FAULTS:
+            // case STICKY_FAULTS:
                 updateFaultStatus(motor, type);
+                
                 break;
             case TEMP:
             case POSITION:
             case VELOCITY:
                 updateDoubleStatus(motor,type);
                 break;
-            case INVERTED_STATE: {
-                String msg = motor.getInverted() ? "inverted" : "";
-                getEntry(motor, type).setString(msg);
-            }
-            break;
+            // case INVERTED_STATE: {
+            //     NetworkTableEntry entry = getEntry(motor,type);
+            //     if (entry != null) {
+            //         String msg = motor.getInverted() ? "inverted" : "";
+            //         entry.setString(msg);
+            //     }
+            // }
         }
     }
 
@@ -294,6 +322,7 @@ public class Diagnostics {
         }
     }
 
+    @Override
     public void updateStatus() {
        
         int allFaults = 0;
