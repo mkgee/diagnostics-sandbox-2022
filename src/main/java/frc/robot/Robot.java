@@ -42,10 +42,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    //diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
-
-    // diagnostics = new DiagnosticsListLayout( Chassis.bLeft, Chassis.bRight);
-    // diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight);
+    // diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
     diagnostics = new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
     // diagnostics = new Diagnostics(Chassis.fLeft, Chassis.fRight);
 
