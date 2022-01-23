@@ -27,7 +27,7 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
  
     /* DataType defines the motor attributes to monitor.  The values here are a sample set. 
        Update this enumeration to define attributes you care about. */
-    enum DataType {FAULTS, /*STICKY_FAULTS,*/ TEMP, /*INVERTED_STATE,*/ POSITION, VELOCITY};
+enum DataType {FAULTS, /*STICKY_FAULTS,*/ TEMP, /*INVERTED_STATE,*/ POSITION, VELOCITY};
 
     /* PowerDataType defines the power distribution panel  to monitor.  The values here are a sample set, 
        update this enumeratio to define the attributes you care about. */
@@ -75,81 +75,65 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
           .add("Fault Indicator", false)
           .withWidget(BuiltInWidgets.kBooleanBox)
           .getEntry();
-
-        int row = 0;
-        // final int faultsWidth = 2;
-        // int col = 0;
+        
         // for each motor: Faults, Sticky Faults, Temp, Inverted state, position, velocity
         for(CCSparkMax m : motors) {
-
+            int col = 0;
             Map<DataType, NetworkTableEntry> entryMap = new EnumMap<>(DataType.class);
 
             // initialize motorEntryMap
             motorEntryMap.put(m.getName(), entryMap);
 
-            final String name = m.getName();
-            final String shortName = m.getShortName();
-
             ShuffleboardLayout motorLayout = motorTab
-                // .getLayout(m.getName(), BuiltInLayouts.kGrid)
                 .getLayout(m.getName(), BuiltInLayouts.kGrid)
-                .withSize(8, 1) // height can't be more than number of visible rows in shuffleboard
-                .withPosition(0, row)
-                .withProperties(Map.of("Label position", "TOP"));
-            row += 2;
+                .withSize(9, 1)
+                // .withPosition(0, row)
+                .withProperties(Map.of("Label position", "LEFT", "Number of Columns", 9,
+                "Number of Rows", 1));
+
             // FAULTS
-            entryMap.put(DataType.FAULTS, motorLayout.add( " faults", "")
+            entryMap.put(DataType.FAULTS, motorLayout.add( "faults", "")
             .withWidget(BuiltInWidgets.kTextView)
-            // .withPosition(col, row) 
-            // .withPosition(0,1)
-            // .withSize(faultsWidth, 1)
+            .withPosition(col++,0)
+            // .withSize(3,1)
             .getEntry() );
-            // col += faultsWidth;
             
             // STICKY_FAULTS
-            // entryMap.put(DataType.STICKY_FAULTS, motorTab.add(shortName + " sticky faults", "")
+            // entryMap.put(DataType.STICKY_FAULTS, motorLayout.add("sticky faults", "")
             // .withWidget(BuiltInWidgets.kTextView)
-            // // .withPosition(col, row) 
-            // .withSize(faultsWidth, 1)
+            // .withPosition(col++, 0)
+            // .withSize(2,1)
             // .getEntry() );
-            // col += faultsWidth;
             
             // INVERTED_STATE
-            // entryMap.put(DataType.INVERTED_STATE, motorLayout.add(shortName + " inv. state", "")
+            // entryMap.put(DataType.INVERTED_STATE, motorLayout.add("inv. state", "")
             // .withWidget(BuiltInWidgets.kTextView)
-            // // .withPosition(col++, row) 
+            // .withPosition(col++, 0) 
             // // .withSize(1, 1)
             // .getEntry() );
 
             // POSITION
-            entryMap.put(DataType.POSITION, motorLayout.add("  position", 0)
+            entryMap.put(DataType.POSITION, motorLayout.add("position", 0)
             .withWidget(BuiltInWidgets.kTextView)
-            // .withPosition(col++, row) 
-            // .withPosition(0,3)
-            // .withSize(1, 1)
+            .withPosition(col++,0)
+            .withSize(2, 1)
             .getEntry() );
 
             // TEMP
-            entryMap.put(DataType.TEMP, motorLayout.add( " temp", 0)
+            entryMap.put(DataType.TEMP, motorLayout.add( "temp", 0)
             .withWidget(BuiltInWidgets.kDial)
-            // .withPosition(col++, row) 
-            // .withPosition(0,4)
-            // .withSize(1, 1)
+            .withPosition(col++,0)
+            .withSize(1, 1)
             .withProperties(Map.of("Min", 10, "Max", 100))  //celsius
             .getEntry() );
             
             // VELOCITY
-            entryMap.put(DataType.VELOCITY, motorLayout.add("  velocity", 0)
+            entryMap.put(DataType.VELOCITY, motorLayout.add("velocity", 0)
             .withWidget(BuiltInWidgets.kDial)
-            // .withPosition(col++, row) 
+            .withPosition(col++,0)
+            .withSize(1,1)
             .getEntry() );
-            
-            // row++;
         }
-
-        // row = 0;
-        // int col = 0;
-        // Power tab
 
         // Voltage
         powerEntryMap.put(PowerDataType.VOLTAGE, powerTab.add("Voltage", 0)
@@ -274,7 +258,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
             case FAULTS:
             // case STICKY_FAULTS:
                 updateFaultStatus(motor, type);
-                
                 break;
             case TEMP:
             case POSITION:

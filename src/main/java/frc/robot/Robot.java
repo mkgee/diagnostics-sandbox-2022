@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.parent.ControMap;
 import frc.parent.RobotMap;
 
@@ -42,18 +42,19 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+    //diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+
     // diagnostics = new DiagnosticsListLayout( Chassis.bLeft, Chassis.bRight);
     // diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight);
-    //diagnostics = new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
+    diagnostics = new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
     // diagnostics = new Diagnostics(Chassis.fLeft, Chassis.fRight);
 
     m_chooser.addOption("My Auto", kCustomAuto);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Reset PID Values", kResetPIDs);
-    SmartDashboard.putNumber("Distance", 0.0);
-    SmartDashboard.putNumber("Angle", 0.0);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // SmartDashboard.putNumber("Distance", 0.0);
+    // SmartDashboard.putNumber("Angle", 0.0);
+    // SmartDashboard.putData("Auto choices", m_chooser);
     Chassis.reset();
 
     switch(DriverStation.getAlliance()){
@@ -114,8 +115,8 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     
-    double dist = SmartDashboard.getNumber("Distance", 0);
-    double angl = SmartDashboard.getNumber("Angle", 0);
+    double dist = 0.0; //SmartDashboard.getNumber("Distance", 0);
+    double angl = 0.0; //SmartDashboard.getNumber("Angle", 0);
     switch (m_autoSelected) {
       case kCustomAuto:
         break;
