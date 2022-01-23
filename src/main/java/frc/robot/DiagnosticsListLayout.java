@@ -87,9 +87,6 @@ enum DataType {FAULTS, /*STICKY_FAULTS,*/ TEMP, /*INVERTED_STATE,*/ POSITION, VE
             // initialize motorEntryMap
             motorEntryMap.put(m.getName(), entryMap);
 
-            final String name = m.getName();
-            final String shortName = m.getShortName();
-
             ShuffleboardLayout motorLayout = motorTab
                 // .getLayout(m.getName(), BuiltInLayouts.kGrid)
                 .getLayout(m.getName(), BuiltInLayouts.kList)
@@ -257,9 +254,9 @@ enum DataType {FAULTS, /*STICKY_FAULTS,*/ TEMP, /*INVERTED_STATE,*/ POSITION, VE
                 updateFaultStatus(motor, type);
                 
                 break;
-            // case TEMP:
+            case TEMP:
             case POSITION:
-            // case VELOCITY:
+            case VELOCITY:
                 updateDoubleStatus(motor,type);
                 break;
             // case INVERTED_STATE: {
