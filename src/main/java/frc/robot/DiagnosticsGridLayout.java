@@ -108,7 +108,7 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
             // create the layout
             ShuffleboardLayout motorLayout = motorTab
                     .getLayout(m.getName(), BuiltInLayouts.kGrid)
-                    .withSize(10, 1)
+                    .withSize(9, 1)
                     // .withPosition(0, layoutRow--)
                     .withProperties(Map.of(
                             "Label position", "LEFT",
