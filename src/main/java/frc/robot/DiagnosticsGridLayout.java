@@ -29,7 +29,7 @@ import static frc.robot.MotorDataType.*;
 public class DiagnosticsGridLayout implements DiagnosticsIF {
 
     /* define the set of MotorDataType data to display */
-    private MotorDataType[] displayedData = { FAULTS, TEMP, POSITION, VELOCITY };
+    private MotorDataType[] displayedData = { FAULTS, STICKY_FAULTS, INVERTED_STATE, TEMP, POSITION, VELOCITY };
 
     /*
      * PowerDataType defines the power distribution panel to monitor. The values
@@ -42,7 +42,7 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
 
     /* Define tabs in the shuffleboard */
     private final ShuffleboardTab summaryTab = Shuffleboard.getTab("Summary");
-    private final ShuffleboardTab motorTab = Shuffleboard.getTab("Motors");
+    private final ShuffleboardTab motorTab = Shuffleboard.getTab("Motors Grid");
     private final ShuffleboardTab powerTab = Shuffleboard.getTab("Power");
 
     /*
@@ -92,15 +92,14 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
     public void init() {
 
         faultEntry = summaryTab
-                .add("Fault Indicator", false)
+                .add("Grid Fault Indicator", false)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
 
-        int layoutRow = 3;
         // for each motor: Faults, Sticky Faults, Temp, Inverted state, position,
         // velocity
         for (CCSparkMax m : motors) {
-
+            int col=0;
             Map<MotorDataType, NetworkTableEntry> entryMap = new EnumMap<>(MotorDataType.class);
 
             // initialize motorEntryMap
@@ -109,33 +108,24 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
             // create the layout
             ShuffleboardLayout motorLayout = motorTab
                     .getLayout(m.getName(), BuiltInLayouts.kGrid)
-                    .withSize(9, 1)
+                    .withSize(10, 1)
                     // .withPosition(0, layoutRow--)
                     .withProperties(Map.of(
                             "Label position", "LEFT",
                             "Number of Columns", displayedData.length, // defines how many widgets in a row
                             "Number of Rows", 1));
-            // try {
-            //     Thread.sleep(150);
-            // } catch (InterruptedException ignored) {
-            // }
-            int col = 0;
-            // create the widgets for each displayed MotorDataType
+
+                            // create the widgets for each displayed MotorDataType
             for (MotorDataType md : displayedData) {
                 entryMap.put(md, motorLayout.add(md.getLabel(), md.getDefaultValue())
-                        .withWidget(md.getWidget())
+                        .withWidget(md.getWidgetType())
                         .withPosition(col++, 0)
+                        .withProperties(md.getProperties())
                         .getEntry());
-                // kludge
-                // try {
-                //     if (!md.getWidget().equals(BuiltInWidgets.kTextView)) {
-                //         Thread.sleep(100);
-                //     }
-                // } catch (InterruptedException ignored) {
-                // }
             }
         }
 
+        /*
         // Voltage
         powerEntryMap.put(PowerDataType.VOLTAGE, powerTab.add("Voltage", 0)
                 .withWidget(BuiltInWidgets.kDial)
@@ -170,7 +160,8 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
                     .withSize(1, 1)
                     .getEntry());
         }
-        Shuffleboard.selectTab("Motors");
+        */
+        Shuffleboard.selectTab("Motors Grid");
     }
 
     private void updateFaultStatus(NetworkTableEntry entry, CCSparkMax motor) {
@@ -323,14 +314,14 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
         }
 
         // update status of Power Distribution Panel
-        for (PowerDataType type : PowerDataType.values()) {
-            updatePowerStatus(type);
-        }
+        // for (PowerDataType type : PowerDataType.values()) {
+        //     updatePowerStatus(type);
+        // }
 
         // update current for individual channels
-        for (int i = 0, size = powerChannels.size(); i < size; i++) {
-            updateCurrentStatus(i);
-        }
+        // for (int i = 0, size = powerChannels.size(); i < size; i++) {
+        //     updateCurrentStatus(i);
+        // }
 
     }
 }

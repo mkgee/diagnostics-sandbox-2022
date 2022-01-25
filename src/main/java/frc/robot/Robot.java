@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private Compressor c = new Compressor(PneumaticsModuleType.REVPH);
-  private DiagnosticsIF diagnostics;
+  private DiagnosticsIF[] diagnostics;
   private long periodicCount;
   int alliance;
   double spdmlt = 1;
@@ -42,9 +42,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    // diagnostics = new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
-    diagnostics = new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight);
-    // diagnostics = new Diagnostics(Chassis.fLeft, Chassis.fRight);
+    diagnostics = new DiagnosticsIF[] {
+      new DiagnosticsNoLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
+      new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
+      new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight)
+    };
 
     m_chooser.addOption("My Auto", kCustomAuto);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -68,7 +70,9 @@ public class Robot extends TimedRobot {
       break;
     }
     
-    diagnostics.init();
+    for(DiagnosticsIF d : diagnostics) {
+      d.init();
+    }
 
   }
 
@@ -85,8 +89,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     
     // call updateStatus once per second
-    if (periodicCount++ % 50 == 0) {
-        diagnostics.updateStatus();
+    if (periodicCount++ % 100 == 0) {
+      for(DiagnosticsIF d : diagnostics) {
+        d.updateStatus();
+      }
     }
     
     if(RobotMap.COMPRESSOR_ENABLE)
