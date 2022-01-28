@@ -4,14 +4,11 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.List;
-import java.util.ArrayList;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.FaultID;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -31,19 +28,9 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
     /* define the set of MotorDataType data to display */
     private MotorDataType[] displayedData = { FAULTS, STICKY_FAULTS, INVERTED_STATE, TEMP, POSITION, VELOCITY };
 
-    /*
-     * PowerDataType defines the power distribution panel to monitor. The values
-     * here are a sample set,
-     * update this enumeratio to define the attributes you care about.
-     */
-    enum PowerDataType {
-        VOLTAGE, TEMP, CURRENT, ENERGY
-    };
-
     /* Define tabs in the shuffleboard */
     private final ShuffleboardTab summaryTab = Shuffleboard.getTab("Summary");
     private final ShuffleboardTab motorTab = Shuffleboard.getTab("Motors Grid");
-    private final ShuffleboardTab powerTab = Shuffleboard.getTab("Power");
 
     /*
      * Define an entry to display an overall fault status. This controls a
@@ -55,9 +42,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
     /* stores an array of the motors */
     private CCSparkMax[] motors;
 
-    /* the power distribution panel */
-    private PowerDistribution pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
-
     /*
      * The motorEntryMap allows us to map a motor name to a NetworkTableEntry. See
      * the getEntry() method on how
@@ -65,11 +49,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
      */
     // key -> motor name, value -> map (key -> DataType, value -> NetworkTableEntry)
     private Map<String, Map<MotorDataType, NetworkTableEntry>> motorEntryMap = new HashMap<>();
-
-    // key -> PowerDataType, value -> NetworkTableEntry
-    private Map<PowerDataType, NetworkTableEntry> powerEntryMap = new HashMap<>();
-    private List<NetworkTableEntry> powerChannels = new ArrayList<>();
-    private final static int NUM_POWER_CHANNELS = 8;
 
     /* contructor, saves the injected motors */
     public DiagnosticsGridLayout(CCSparkMax... motors) {
@@ -125,42 +104,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
             }
         }
 
-        /*
-        // Voltage
-        powerEntryMap.put(PowerDataType.VOLTAGE, powerTab.add("Voltage", 0)
-                .withWidget(BuiltInWidgets.kDial)
-                // .withPosition(col++, row)
-                .withSize(1, 1)
-                .getEntry());
-
-        // temperature
-        powerEntryMap.put(PowerDataType.TEMP, powerTab.add("Temperature", 0)
-                .withWidget(BuiltInWidgets.kDial)
-                // .withPosition(col++, row)
-                .withSize(1, 1)
-                .getEntry());
-
-        // total current
-        powerEntryMap.put(PowerDataType.CURRENT, powerTab.add("Total Current", 0)
-                .withWidget(BuiltInWidgets.kDial)
-                // .withPosition(col++, row)
-                .withSize(1, 1)
-                .getEntry());
-
-        powerEntryMap.put(PowerDataType.ENERGY, powerTab.add("Total Energy", 0)
-                .withWidget(BuiltInWidgets.kDial)
-                // .withPosition(col++, row)
-                .withSize(1, 1)
-                .getEntry());
-
-        for (int i = 0; i < NUM_POWER_CHANNELS; i++) {
-            powerChannels.add(powerTab.add("Channel " + i + " current", 0)
-                    .withWidget(BuiltInWidgets.kDial)
-                    // .withPosition(col++, row)
-                    .withSize(1, 1)
-                    .getEntry());
-        }
-        */
         Shuffleboard.selectTab("Motors Grid");
     }
 
@@ -264,37 +207,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
         }
     }
 
-    private void updatePowerStatus(PowerDataType dataType) {
-
-        double value = 0.0;
-        switch (dataType) {
-            case VOLTAGE:
-                value = pdp.getVoltage();
-                break;
-            case TEMP:
-                value = pdp.getTemperature();
-                break;
-            case CURRENT:
-                value = pdp.getTotalCurrent();
-                break;
-            case ENERGY:
-                value = pdp.getTotalEnergy();
-                break;
-            default:
-                System.err.println("Unsupported PowerDataType : " + dataType);
-                return;
-        }
-        powerEntryMap.get(dataType).setDouble(value);
-    }
-
-    private void updateCurrentStatus(int channel) {
-        if (channel < powerChannels.size()) {
-            powerChannels.get(channel).setDouble(pdp.getCurrent(channel));
-        } else {
-            System.err.println("Invalid channel: " + channel);
-        }
-    }
-
     @Override
     public void updateStatus() {
 
@@ -312,16 +224,6 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
                 updateStatus(motor, type);
             }
         }
-
-        // update status of Power Distribution Panel
-        // for (PowerDataType type : PowerDataType.values()) {
-        //     updatePowerStatus(type);
-        // }
-
-        // update current for individual channels
-        // for (int i = 0, size = powerChannels.size(); i < size; i++) {
-        //     updateCurrentStatus(i);
-        // }
 
     }
 }

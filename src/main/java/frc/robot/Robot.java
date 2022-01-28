@@ -45,7 +45,8 @@ public class Robot extends TimedRobot {
     diagnostics = new DiagnosticsIF[] {
       new DiagnosticsNoLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
       new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
-      new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight)
+      new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
+      new PowerStatus()
     };
 
     m_chooser.addOption("My Auto", kCustomAuto);
