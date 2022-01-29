@@ -11,7 +11,7 @@ public enum MotorDataType {
     STICKY_FAULTS("Sticky Faults", kTextView, "No Fault", 2), 
     TEMP("Temp",kNumberBar, 0, Map.of("Min", 0, "Max", 100), 1), 
     INVERTED_STATE("Inv. State", kTextView, "", 1), 
-    POSITION("Position", kTextView, 0, 1), 
+    POSITION("Position", kTextView, "", 1), 
     VELOCITY("Velocity", kNumberBar, 0, Map.of("Min", 0, "Max", 100), 1);
 
     private final BuiltInWidgets widgetType;
