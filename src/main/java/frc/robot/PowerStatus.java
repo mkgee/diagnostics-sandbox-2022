@@ -29,6 +29,7 @@ public class PowerStatus implements DiagnosticsIF {
     /* the power distribution panel */
     private PowerDistribution pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
     
+    private NetworkTableEntry powerEntry;
     @Override
     public void init() {
 
@@ -59,6 +60,10 @@ public class PowerStatus implements DiagnosticsIF {
                     .getEntry());
             col = col < 3 ? col+1 : 0;
         }
+
+        // powerTab.add("power", pdp)
+        //     .withWidget(BuiltInWidgets.kPowerDistribution)
+        //     .withSize(4, 4);        
     }
 
     @Override
@@ -72,6 +77,9 @@ public class PowerStatus implements DiagnosticsIF {
         for (int i = 0, size = powerChannels.size(); i < size; i++) {
             updateCurrentStatus(i);
         }
+
+        // powerEntry.setValue(pdp);
+       
     }
 
     private void updatePowerStatus(PowerDataType dataType) {

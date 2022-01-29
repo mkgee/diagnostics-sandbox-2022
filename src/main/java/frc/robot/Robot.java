@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.parent.ControMap;
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
   int alliance;
   double spdmlt = 1;
 
+  private final ShuffleboardTab testTab = Shuffleboard.getTab("test");
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
       d.init();
     }
 
+    
   }
 
   
