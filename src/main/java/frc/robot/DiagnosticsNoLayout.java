@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,8 +28,6 @@ public class DiagnosticsNoLayout implements DiagnosticsIF {
     private Map<String, Map<MotorDataType, NetworkTableEntry>> motorEntryMap = new HashMap<>();
 
     private MotorUpdate motorUpdate;
-
-    private Spark spark = new Spark(0);
 
     public DiagnosticsNoLayout(CCSparkMax... motors) {
         this.motors = motors;
@@ -80,6 +77,6 @@ public class DiagnosticsNoLayout implements DiagnosticsIF {
   
     @Override
     public void updateStatus() {
-        // motorUpdate.updateStatus();
+        motorUpdate.updateStatus();
     }
 }

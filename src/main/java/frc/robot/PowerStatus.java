@@ -29,7 +29,6 @@ public class PowerStatus implements DiagnosticsIF {
     /* the power distribution panel */
     private PowerDistribution pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
     
-    private NetworkTableEntry powerEntry;
     @Override
     public void init() {
 
