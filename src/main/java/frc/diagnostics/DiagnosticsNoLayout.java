@@ -75,7 +75,6 @@ public class DiagnosticsNoLayout implements DiagnosticsIF {
             for (MotorDataType md : displayedData) {
                 int width = md.getWidth();
                 String widgetName = shortName + " " + md.getLabel();
-                System.out.println("widgetName: " + widgetName);
                 entryMap.put(md, motorTab.add(widgetName, md.getDefaultValue())
                 .withWidget(md.getWidgetType())
                 .withPosition(col, row) 
