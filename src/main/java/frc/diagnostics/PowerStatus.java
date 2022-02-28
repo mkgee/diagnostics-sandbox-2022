@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.diagnostics;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-import static frc.robot.PowerDataType.*;
+import static frc.diagnostics.PowerDataType.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ public class PowerStatus implements DiagnosticsIF {
 
         ShuffleboardLayout layout = powerTab.getLayout("Channel Current",  BuiltInLayouts.kGrid)
         .withSize(8, 2)
+        .withPosition(0, 1)
         .withProperties(Map.of(
             "Label position", "BOTTOM",
             "Number of Columns", displayedPower.length, // defines how many widgets in a row
@@ -52,7 +53,7 @@ public class PowerStatus implements DiagnosticsIF {
         for (int i = 0; i < NUM_POWER_CHANNELS; i++) {
             powerChannels.add(layout.add("Channel " + i, 0)
                     .withWidget(BuiltInWidgets.kNumberBar)
-                    // .withPosition(col++, row)
+                    // .withPosition(col++, 2)
                     .withPosition(col, i / 4)
                     .withProperties(Map.of("Min", 0, "Max", 10))
                     .withSize(1, 1)

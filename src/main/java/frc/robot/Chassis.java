@@ -1,9 +1,8 @@
 package frc.robot;
 
 import frc.parent.*;
+import frc.helpers.CCSparkMax;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
@@ -12,18 +11,12 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Chassis {
 
-    //Talon objects for the wheels
     //These control the main 4 motors on the robot
-    public static CCSparkMax fLeft = new CCSparkMax("Front Left", "FL", RobotMap.FORWARD_LEFT, 
-        MotorType.kBrushless, IdleMode.kBrake, RobotMap.FORWARD_LEFT_REVERSE);
-    public static CCSparkMax fRight = new CCSparkMax("Front Right", "FR", RobotMap.FORWARD_RIGHT, 
-        MotorType.kBrushless, IdleMode.kBrake, RobotMap.FORWARD_RIGHT_REVERSE);
-    public static CCSparkMax bLeft = new CCSparkMax("Back Left", "BL",RobotMap.BACK_LEFT, 
-        MotorType.kBrushless, IdleMode.kBrake, RobotMap.BACK_LEFT_REVERSE);
-    public static CCSparkMax bRight = new CCSparkMax("Back Right", "BR", RobotMap.BACK_RIGHT, 
-        MotorType.kBrushless, IdleMode.kBrake, RobotMap.BACK_RIGHT_REVERSE);
 
-    public static CCTalon motor2019 = new CCTalon(RobotMap.TALON, false);
+    public static CCSparkMax fLeft = new CCSparkMax(MotorDef.ForwardLeftWheel);
+    public static CCSparkMax fRight = new CCSparkMax(MotorDef.ForwardRightWheel);
+    public static CCSparkMax bLeft = new CCSparkMax(MotorDef.BackLeftWheel);
+    public static CCSparkMax bRight = new CCSparkMax(MotorDef.BackRightWheel);
 
     //AHRS gyro measures the angle of the bot
     public static AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -69,7 +62,7 @@ public class Chassis {
    
     //Sets the gyro and encoders to zero
     public static void reset(){
-        gyro.reset();
+        // gyro.reset();
         fLeft.reset();
         fRight.reset();
         bLeft.reset();
@@ -87,9 +80,9 @@ public class Chassis {
         return dist;
     }
 
-    public static double getAngle(){
-        return gyro.getAngle();
-    }
+    // public static double getAngle(){
+    //     return gyro.getAngle();
+    // }
 
     /*
         "Whosever holds these loops, if he be worthy, shall posses the power of AJ"
@@ -171,8 +164,5 @@ public class Chassis {
             }
         }
     }
-
-
-    
     
 }

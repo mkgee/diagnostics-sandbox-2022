@@ -1,7 +1,12 @@
-package frc.robot;
+package frc.diagnostics;
 
+import frc.helpers.CCSparkMax;
+import static frc.diagnostics.MotorDataType.*;
+
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -10,8 +15,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-
-import static frc.robot.MotorDataType.*;
 
 /**
  * Diagnostics defines some tabs in the shuffleboard to display diagnostics for
@@ -34,8 +37,8 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
      */
     private NetworkTableEntry faultEntry;
 
-    /* stores an array of the motors */
-    private CCSparkMax[] motors;
+    /* stores a list of the motors */
+    private List<CCSparkMax> motors;
 
     /*
      * The motorEntryMap allows us to map a motor name to a NetworkTableEntry. See
@@ -49,7 +52,7 @@ public class DiagnosticsGridLayout implements DiagnosticsIF {
 
     /* contructor, saves the injected motors */
     public DiagnosticsGridLayout(CCSparkMax... motors) {
-        this.motors = motors;
+        this.motors = Arrays.asList(motors);
     }
 
     /*

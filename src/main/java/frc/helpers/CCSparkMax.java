@@ -1,9 +1,12 @@
-package frc.robot;
+package frc.helpers;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.REVLibError;
+import frc.parent.MotorDef;
+//import com.revrobotics.*;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
+//import frc.robot.*;
+//import com.revrobotics.CANSparkMax.ControlType;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
@@ -11,7 +14,7 @@ public class CCSparkMax extends CANSparkMax{
 
     private String name;
     private String shortName;
-    private SparkMaxPIDController pidController;
+    public  SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
 
     /**
@@ -21,21 +24,27 @@ public class CCSparkMax extends CANSparkMax{
      * @param controlMode Specify whether the motor controller is operating in Brushed or Brushless mode
      * @param idleMode Specify whether the motor controller is set to Coast or Brake mode
      * @param reverse Reverses the direction of the motor controller
+     * @param encoder If the motor has an encoder or not
      */
     public CCSparkMax(String name, String shortName, int deviceID, MotorType controlMode, IdleMode idleMode,
-     boolean reverse){
+     boolean reverse, boolean encoder){
         super(deviceID, controlMode);
+        if(controlMode.equals(MotorType.kBrushless)) encoder = true;
         this.name = name;
         this.shortName = shortName;
-        if(super.setIdleMode(idleMode) != REVLibError.kOk){
-            System.out.println("Spark Max Idle Mode Not Set");
-        }
+        
         super.setInverted(reverse);
         
 
         pidController = super.getPIDController();
-        encoder = super.getEncoder();
+        if(encoder) this.encoder = super.getEncoder();
     }
+
+    public CCSparkMax(MotorDef motorDef) {
+        this(motorDef.getName(), motorDef.getShortName(), motorDef.getCANBusAddress(), motorDef.getType(), motorDef.getIdleMode(),
+            motorDef.isInverted(), true);
+    }
+    
 
     public void reset(){
         encoder.setPosition(0);
@@ -87,7 +96,7 @@ public class CCSparkMax extends CANSparkMax{
      * @param Ki The integral gain value
      * @param Kd The derivative gain value
      */
-    public void setPID(double Kp, double Ki, double Kd, double Ff){
+    public void setPID(double Kp, double Ki, double Kd, double Ff){  
         pidController.setP(Kp);
         pidController.setI(Ki);
         pidController.setD(Kd);

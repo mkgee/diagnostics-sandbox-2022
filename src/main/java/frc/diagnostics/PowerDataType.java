@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.diagnostics;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import static edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets.*;

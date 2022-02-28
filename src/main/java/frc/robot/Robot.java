@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.diagnostics.DiagnosticsIF;
+import frc.diagnostics.DiagnosticsNoLayout;
+import frc.diagnostics.PowerStatus;
 import frc.parent.ControMap;
 import frc.parent.RobotMap;
 
@@ -42,9 +45,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     
     diagnostics = new DiagnosticsIF[] {
-      new DiagnosticsNoLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
-      new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
-      new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
+      new DiagnosticsNoLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight, TedBallin.shooter, TedBallin.shooter2, Arms.climber),
+      // new DiagnosticsListLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
+      // new DiagnosticsGridLayout(Chassis.fLeft, Chassis.fRight, Chassis.bLeft, Chassis.bRight),
       new PowerStatus()
     };
 

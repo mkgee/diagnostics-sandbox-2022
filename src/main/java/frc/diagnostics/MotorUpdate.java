@@ -1,5 +1,8 @@
-package frc.robot;
+package frc.diagnostics;
 
+import frc.helpers.CCSparkMax;
+
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -11,12 +14,12 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 public class MotorUpdate {
 
     private Map<String, Map<MotorDataType, NetworkTableEntry>> motorEntryMap;
-    private CCSparkMax[] motors;
+    private List<CCSparkMax> motors;
     private NetworkTableEntry faultEntry;
     private MotorDataType[] displayedData;
 
     public MotorUpdate(Map<String, Map<MotorDataType, NetworkTableEntry>> motorEntryMap,
-        CCSparkMax[] motors, NetworkTableEntry faultEntry, MotorDataType[] displayedData) {
+        List<CCSparkMax> motors, NetworkTableEntry faultEntry, MotorDataType[] displayedData) {
         this.motorEntryMap = motorEntryMap;
         this.motors = motors;
         this.faultEntry = faultEntry;
